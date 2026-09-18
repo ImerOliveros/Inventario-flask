@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="inventario-box">
+        <h1>Inventario de productos</h1>
+        <p>Sesión iniciada como: <strong>{{ usuario }}</strong> — <a href="/logout">Cerrar sesión</a></p>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto[0] }}</td>
+                <td>{{ producto[1] }}</td>
+                <td>${{ "%.2f"|format(producto[2]) }}</td>
+                <td>{{ producto[3] }}</td>
+                <td>
+                    <a href="/editar_producto/{{ producto[0] }}">✏️ Editar</a>
+                    <form method="POST" action="/eliminar_producto/{{ producto[0] }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este producto?');">
+                        <button type="submit" class="btn-eliminar">🗑️ Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+                <h2 style="margin-top: 2rem;">Agregar producto</h2>
+        <form method="POST" action="/agregar_producto" class="form-producto">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="number" name="precio" placeholder="Precio" step="0.01" required>
+            <input type="number" name="stock" placeholder="Stock" required>
+            <button type="submit">Agregar</button>
+        </form>
+    </div>
+</body>
+</html>
